@@ -41,8 +41,8 @@ d3.csv('data/world_bank_2010_gdp_co2.csv', parse, dataLoaded);
  maxX = d3.max(rows, function(d){ return d.gdpPerCap; });
  scaleX.domain([minX *0.85, maxX*1.15]);
 
- var minY = d3.min(rows, function(d){return d.CO2E;}),
-     maxY = d3.min(rows, function(d){return d.CO2E;});
+ var minY = d3.min(rows, function(d){return d.CO2EM;}),
+     maxY = d3.min(rows, function(d){return d.CO2EM;});
  scaleY.domain([minY*0.5,maxY*500000]);
 
  /* You can draw the axes now or later in the draw function */
@@ -75,20 +75,20 @@ d3.csv('data/world_bank_2010_gdp_co2.csv', parse, dataLoaded);
     .append('g')
     .attr('class','node')
     .filter(function(d){
-             return d.gdpPerCap && d.CO2E && d.populationTotal;
+             return d.gdpPerCap && d.CO2EM && d.CO2E;
  })
     .attr('transform', function(d){
-             return 'translate('+scaleX(d.gdpPerCap)+','+scaleY(d.CO2E)+')';
+             return 'translate('+scaleX(d.gdpPerCap)+','+scaleY(d.CO2EM)+')';
     });
 
-     var minR = d3.min(rows,function(d){return d.populationTotal;}),
-         maxR = d3.max(rows,function(d){return d.populationTotal;});
+     var minR = d3.min(rows,function(d){return d.CO2E;}),
+         maxR = d3.max(rows,function(d){return d.CO2E;});
 
      var scaleR = d3.scale.log().range([0,4]);
          scaleR.domain = ([minR,maxR]);
 
     nodes.append('circle')
-         .attr('r',function(d){return scaleR(d.populationTotal);});
+         .attr('r',function(d){return scaleR(d.CO2E);});
         //.attr('r',20);
 
     nodes.append('text')
@@ -105,7 +105,7 @@ d3.csv('data/world_bank_2010_gdp_co2.csv', parse, dataLoaded);
  gdpPerCap: row['GDP per capita, PPP (constant 2011 international $)']=='..'?undefined:+row['GDP per capita, PPP (constant 2011 international $)'],
  populationTotal: row['Population, total']=='..'?undefined:+row['Population, total'],
  CO2E: row['CO2 emissions (kt)']=='..'?undefined:+row['CO2 emissions (kt)'],
- CO2EM: row['CO2 emissions (metric tons per capita)'] = ".."?undefined:row['CO2 emissions (metric tons per capita)'],
+ CO2EM: row['CO2 emissions (metric tons per capita)'] == ".."?undefined:row['CO2 emissions (metric tons per capita)'],
  country: row['Country Name'],
  countryCode: row['Country Code']
  };
